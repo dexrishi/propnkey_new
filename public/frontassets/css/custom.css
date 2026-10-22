@@ -1,0 +1,1128 @@
+/* Custom CSS for Propnkey Application */
+
+/* Header Logo Styling */
+.header img {
+    max-height: 70px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Footer Logo Styling */
+.lastfooter .logobox img {
+    max-height: 80px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* About Page Styling */
+.abtfirst .our-story-heading_component {
+    font-size: 2.9em !important;
+}
+
+.abtfirst p {
+    font-size: 1.1em !important;
+    line-height: 1.6;
+}
+
+/* Prevent horizontal scrolling on mobile */
+html, body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 100%;
+    position: relative;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure all containers are properly constrained */
+.container,
+.container-fluid {
+    overflow-x: unset;
+}
+
+/* Fix for owl carousel causing overflow */
+/*.owl-carousel {
+    overflow: hidden;
+}*/
+
+.owl-stage-outer {
+    overflow: hidden;
+}
+
+.owl-stage {
+    display: flex;
+}
+
+/* Global fix for w-dyn-items and w-dyn-item classes */
+.w-dyn-items,
+.w-dyn-item {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Fix Private Residences section for mobile */
+@media only screen and (max-width: 767px) {
+    .projextt {
+        overflow: visible;
+        width: 100%;
+    }
+    
+    .projextt .container {
+        overflow: visible;
+        max-width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .projextt .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .projextt .col-md-12 {
+        padding-left: 0;
+        padding-right: 0;
+        max-width: 100%;
+        overflow: visible;
+    }
+    
+    .projextt .nav-pills {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        padding-bottom: 5px;
+    }
+    
+    .projextt .nav-pills::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .projextt .nav-pills::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .projextt .nav-pills::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+    }
+    
+    .projextt .nav-pills .nav-item {
+        flex-shrink: 0;
+    }
+    
+    .projextt .owl-carousel {
+        overflow: visible;
+        width: 100%;
+        /* Allow vertical scrolling to pass through */
+        touch-action: pan-y pinch-zoom;
+        /* Prevent overscroll bounce */
+        overscroll-behavior-x: contain;
+    }
+    
+    .projextt .owl-stage-outer {
+        overflow: hidden;
+        /* Allow vertical scrolling to pass through */
+        touch-action: pan-y pinch-zoom;
+        /* Prevent overscroll bounce */
+        overscroll-behavior-x: contain;
+    }
+    
+    .projextt .owl-stage {
+        /* Allow vertical scrolling to pass through */
+        touch-action: pan-y pinch-zoom;
+        /* Prevent transform from going negative */
+        will-change: transform;
+    }
+    
+    /* Fix for location carousel on mobile */
+    .location {
+        touch-action: pan-y;
+        overflow-y: visible;
+    }
+    
+    .location .container {
+        touch-action: pan-y;
+        overflow-y: visible;
+    }
+    
+    .location .row {
+        touch-action: pan-y;
+        overflow-y: visible;
+    }
+    
+    .location .tab-content {
+        touch-action: pan-y;
+        overflow-y: visible;
+    }
+    
+    .location .tab-pane {
+        touch-action: pan-y;
+        overflow-y: visible;
+    }
+    
+    .location .owl-carousel {
+        overflow: hidden;
+        width: 100%;
+        touch-action: pan-y pinch-zoom;
+        /* Prevent overscroll bounce */
+        overscroll-behavior-x: contain;
+    }
+    
+    .location .owl-stage-outer {
+        overflow: hidden;
+        touch-action: pan-y pinch-zoom;
+        /* Prevent overscroll bounce */
+        overscroll-behavior-x: contain;
+    }
+    
+    .location .owl-stage {
+        touch-action: pan-y pinch-zoom;
+        /* Prevent transform from going negative */
+        will-change: transform;
+    }
+    
+    .location .owl-item {
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    .location .pslider {
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    .location .locabox {
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    /* Ensure the carousel container doesn't block vertical scrolling */
+    .projextt .tab-content {
+        touch-action: pan-y;
+        overflow: visible;
+    }
+    
+    .projextt .tab-pane {
+        touch-action: pan-y;
+        overflow: visible;
+    }
+    
+    /* Ensure the entire section allows vertical scrolling */
+    .projextt {
+        touch-action: pan-y;
+        overflow-y: visible;
+    }
+    
+    /* Allow vertical scrolling on carousel items */
+    .projextt .owl-item {
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    /* Ensure body/html can scroll on mobile */
+    @media only screen and (max-width: 767px) {
+        html, body {
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            height: auto !important;
+            position: relative !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        
+        /* Ensure location section allows vertical scrolling */
+        .location {
+            touch-action: pan-y !important;
+            overflow-y: visible !important;
+            position: relative !important;
+        }
+        
+        .location .container,
+        .location .row,
+        .location .col-md-12 {
+            touch-action: pan-y !important;
+            overflow-y: visible !important;
+        }
+        
+        .location .tab-content,
+        .location .tab-pane {
+            touch-action: pan-y !important;
+            overflow-y: visible !important;
+        }
+        
+        .location .owl-carousel,
+        .location .owl-stage-outer,
+        .location .owl-stage,
+        .location .owl-item,
+        .location .pslider,
+        .location .locabox {
+            touch-action: pan-y pinch-zoom !important;
+        }
+    }
+    
+    /* Fix Private Residences heading for mobile */
+    .projextt .stitle {
+        font-size: 2.5rem !important;
+        letter-spacing: 0 !important;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        padding: 0 15px !important;
+        text-align: center;
+        line-height: 1.2;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        overflow: visible;
+        white-space: normal;
+    }
+    
+    .projextt .stitle br {
+        display: block;
+    }
+    
+    .projextt .private_properties-sub1 {
+        font-size: 2rem !important;
+        padding: 0 15px !important;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        text-align: center;
+        margin-top: 1rem !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box;
+        overflow: visible;
+        white-space: normal;
+    }
+    
+    /* Fix About section heading for mobile */
+    .about_container-heading {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        font-size: 2.5rem !important;
+        line-height: 1.2;
+        padding: 0 15px;
+    }
+    
+    .about_container-heading span,
+    .about_container-heading .bold-text {
+        display: block;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .about_container-heading .bold-text {
+        font-size: 2.5rem !important;
+        margin-top: 0.5rem;
+    }
+    
+    .about {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+    }
+    
+    .about .container {
+        overflow-x: visible;
+        max-width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+        position: relative;
+    }
+    
+    .about .row {
+        margin-left: 0;
+        margin-right: 0;
+        overflow-x: visible;
+    }
+    
+    .about .col-md-6,
+    .about .col-md-12 {
+        padding-left: 15px;
+        padding-right: 15px;
+        overflow-x: visible;
+    }
+    
+    /* Ensure all images are responsive */
+    .about .abtimg {
+        overflow: visible;
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px !important;
+    }
+    
+    .about .abtimg img {
+        max-width: 50%;
+        height: auto;
+    }
+    
+    /* Fix the absolutely positioned second image - allow overlap on mobile */
+    .about .left_image-2 {
+        right: -10px !important;
+        max-width: 50%;
+    }
+    
+    @media (max-width: 768px) {
+        /* Ensure the column maintains structure for overlap */
+        .about .col-md-6:first-child {
+            position: relative;
+            overflow: visible;
+            padding-right: 0;
+        }
+        
+        .about .left_image-1 {
+            position: relative !important;
+            z-index: 1;
+            max-width: 320px;
+            width: 70%;
+            display: block;
+        }
+        
+        .about .left_image-2 {
+            position: absolute !important;
+            right: -10px !important;
+            top: 20% !important;
+            width: 335px !important;
+            max-width: 50% !important;
+            margin-top: 0 !important;
+            z-index: 2;
+            display: block;
+        }
+        
+        /* Ensure parent container allows overlap */
+        .about .abtimg {
+            position: relative !important;
+            overflow: visible !important;
+            min-height: 300px;
+            width: 100%;
+            padding-right: 0;
+        }
+        
+        /* Ensure row and container allow overflow for overlap */
+        .about .row {
+            overflow-x: visible !important;
+        }
+        
+        .about .container {
+            overflow-x: visible !important;
+            padding-right: 15px;
+        }
+        
+        /* Adjust image sizes for smaller screens */
+        @media (max-width: 545px) {
+            .about .left_image-1 {
+                max-width: 280px;
+                width: 100%;
+            }
+            
+            .about .left_image-2 {
+                width: 200px !important;
+                max-width: 55% !important;
+                right: -5px !important;
+                top: 35% !important;
+            }
+        }
+    }
+    
+    /* Location property card - make name clickable */
+    .locatext h6 a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .locatext h6 a:hover {
+        color: #a98862;
+        text-decoration: none;
+    }
+    
+    /* Fix search input border - keep border visible on focus */
+    .search_form-textfield,
+    input.search_form-textfield,
+    .search_form-textfield:focus,
+    .search_form-textfield:active,
+    .search_form-textfield:focus-visible,
+    input.search_form-textfield:focus,
+    input.search_form-textfield:active,
+    input.search_form-textfield:focus-visible {
+        border: 1px solid #fff !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    
+    .innerserch .search_form-textfield,
+    .innerserch input.search_form-textfield,
+    .innerserch .search_form-textfield:focus,
+    .innerserch .search_form-textfield:active,
+    .innerserch .search_form-textfield:focus-visible,
+    .innerserch input.search_form-textfield:focus,
+    .innerserch input.search_form-textfield:active,
+    .innerserch input.search_form-textfield:focus-visible {
+        border: 1px solid #ccc !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    
+    /* Ensure search form container and field have proper positioning */
+    .search_form-container {
+        position: relative !important;
+    }
+    
+    .search_form-field {
+        position: relative !important;
+    }
+    
+    .search_form-field.position-relative {
+        position: relative !important;
+    }
+    
+    /* Smart search suggestions dropdown */
+    #search-suggestions {
+        position: absolute !important;
+        top: calc(100% + 5px) !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        background: #ffffff !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+        z-index: 10000 !important;
+        max-height: 400px !important;
+        overflow-y: auto !important;
+        margin-top: 0 !important;
+        display: none !important;
+    }
+    
+    #search-suggestions[style*="block"],
+    #search-suggestions.show {
+        display: block !important;
+    }
+    
+    /* Ensure no parent containers are clipping */
+    .search_form-container {
+        position: relative !important;
+        overflow: visible !important;
+    }
+    
+    .search_form-field {
+        position: relative !important;
+        overflow: visible !important;
+    }
+    
+    .searchbox {
+        overflow: visible !important;
+    }
+    
+    .innerserch {
+        overflow: visible !important;
+    }
+    
+    .suggestion-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        transition: background-color 0.2s;
+    }
+    
+    .suggestion-item:hover,
+    .suggestion-item.selected {
+        background-color: #f8f9fa;
+    }
+    
+    .suggestion-item:last-child {
+        border-bottom: none;
+    }
+    
+    .suggestion-content {
+        flex: 1;
+    }
+    
+    .suggestion-title {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 2px;
+    }
+    
+    .suggestion-subtitle {
+        font-size: 12px;
+        color: #666;
+    }
+    
+    .suggestion-type {
+        font-size: 10px;
+        background: #e9ecef;
+        color: #495057;
+        padding: 2px 6px;
+        border-radius: 4px;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+    
+    .loading-suggestion {
+        padding: 12px 16px;
+        text-align: center;
+        color: #666;
+        font-style: italic;
+    }
+    
+    .no-suggestions {
+        padding: 12px 16px;
+        text-align: center;
+        color: #999;
+        font-style: italic;
+    }
+    
+    /* Fix members/team section for mobile */
+    .members {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    .members .container {
+        overflow-x: hidden;
+        max-width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .members .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    
+    .members .col-md-12 {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        max-width: 100%;
+        overflow-x: hidden;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .team-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-rows: auto !important;
+        grid-auto-columns: 1fr !important;
+        grid-auto-flow: row !important;
+        grid-column-gap: 16px;
+        grid-row-gap: 16px;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box;
+        margin: 0 !important;
+        padding: 0 !important;
+        justify-items: center !important;
+    }
+    
+    .team-grid > * {
+        min-width: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    .team-grid.w-dyn-items {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .member_component {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+    
+    .member_component.w-dyn-item {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+    }
+    
+    .member_component img,
+    .members_image {
+        max-width: 140px !important;
+        width: 140px !important;
+        height: 140px !important;
+        object-fit: cover;
+        box-sizing: border-box;
+        display: block;
+        margin: 0 auto 0.5rem auto;
+    }
+    
+    .members_image-placeholder {
+        width: 140px !important;
+        height: 140px !important;
+        max-width: 100% !important;
+        background-color: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: #666;
+        border-radius: 50%;
+        margin: 0 auto 0.5rem auto;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
+    
+    .member_actions {
+        flex-wrap: wrap;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+        justify-content: center !important;
+    }
+    
+    .member_show-more {
+        max-width: 100%;
+        word-wrap: break-word;
+        white-space: normal;
+    }
+    
+    .members_name,
+    .members_designation {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .member_contact-link {
+        flex-shrink: 0;
+    }
+    
+    /* Fix section_bottom-content for mobile */
+    .section_bottom-content {
+        overflow-x: hidden;
+        width: 100%;
+    }
+    
+    .section_bottom-content .container {
+        overflow-x: hidden;
+        max-width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .section_bottom-content p {
+        width: auto !important;
+        max-width: 100%;
+        padding: 0 15px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    .bottom-content_caption {
+        font-size: 2rem !important;
+        padding: 0 15px;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.3;
+    }
+    
+    .bottom-content_caption .decorate {
+        display: inline;
+    }
+}
+
+/* Additional fixes for smaller mobile devices */
+@media only screen and (max-width: 545px) {
+    .about_container-heading {
+        font-size: 2rem !important;
+    }
+    
+    .about_container-heading .bold-text {
+        font-size: 2rem !important;
+        margin-top: 0.3rem;
+    }
+    
+    .projextt .nav-pills .nav-item {
+        /* min-width: 120px; */
+        font-size: 11px;
+    }
+    
+    .projextt .nav-pills .nav-link {
+        padding: 8px 12px;
+    }
+    
+    /* Further reduce heading sizes for very small screens */
+    .projextt .stitle {
+        font-size: 2.5rem !important;
+        padding: 0 10px;
+    }
+    
+    .projextt .private_properties-sub1 {
+        font-size: 1.75rem !important;
+        padding: 0 10px;
+    }
+    
+    /* Further fixes for members section on very small screens */
+    .team-grid {
+        grid-column-gap: 12px;
+        grid-row-gap: 12px;
+    }
+    
+    .member_component {
+        padding: 1.5rem !important;
+    }
+    
+    .members_image {
+        width: 120px !important;
+        height: 120px !important;
+    }
+    
+    .members_name {
+        font-size: 1.5rem !important;
+    }
+    
+    .section_bottom-content p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .bottom-content_caption {
+        font-size: 1.75rem !important;
+    }
+}
+
+/* Reduce spacing between location items on mobile */
+@media only screen and (max-width: 767px) {
+    .locasslider .owl-stage-outer {
+        margin: 0 -5px;
+    }
+    
+    .locasslider .owl-stage {
+        margin: 0;
+    }
+    
+    .locasslider .pslider {
+        padding: 0 5px;
+    }
+    
+    .locasslider .owl-item {
+        padding: 0 5px;
+    }
+}
+
+@media only screen and (max-width: 545px) {
+    .locasslider .owl-stage-outer {
+        margin: 0 -3px;
+    }
+    
+    .locasslider .pslider {
+        padding: 0 3px;
+    }
+    
+    .locasslider .owl-item {
+        padding: 0 3px;
+    }
+}
+
+/* Desktop: Show two-column layout, hide mobile order */
+.leftbar-desktop,
+.navlisk-desktop {
+    display: block;
+}
+
+.mobile-menu-order {
+    display: none;
+}
+
+/* Add space above tagline in desktop view to prevent overlap */
+.leftbar-desktop .navbar19_tagline {
+    margin-top: 2rem;
+    padding-top: 1rem;
+}
+
+/* Align right menu items with left text content - match leftbar vertical position */
+.navlisk-desktop {
+    padding-top: 3rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+.navlisk-desktop .navlisk {
+    width: 100%;
+    margin-top: 0;
+}
+
+/* Ensure menu items align with left text starting position */
+.navlisk-desktop .navlisk ul {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Mobile: Hide desktop layout, show mobile order */
+@media only screen and (max-width: 767px) {
+    .leftbar-desktop,
+    .navlisk-desktop {
+        display: none !important;
+    }
+    
+    .mobile-menu-order {
+        display: block !important;
+    }
+    
+    .offcanvas {
+        padding-top: 100px !important;
+    }
+    
+    .mobile-tagline {
+        margin-top: 20px;
+        margin-bottom: 2rem;
+    }
+    
+    .mobile-menu {
+        margin-top: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .mobile-contact {
+        margin-top: 2rem;
+    }
+    
+    .mobile-contact .mobile-company-name {
+        margin-bottom: 1.5rem;
+    }
+    
+    .mobile-footer {
+        margin-top: 2rem;
+    }
+}
+
+/* Make middlefooter smaller when landline is not present */
+.middlefooter.no-landline {
+    width: 900px !important;
+}
+
+@media only screen and (max-width: 767px) {
+    .middlefooter.no-landline {
+        width: 600px !important;
+    }
+}
+
+/* Ensure all about_services-box text is white */
+.about_services-box {
+    color: #fff !important;
+}
+
+.about_services-box * {
+    color: #fff !important;
+}
+
+.about_services-box_heading {
+    color: #fff !important;
+}
+
+.about_services-box_paragraph {
+    color: #fff !important;
+}
+
+/* Theme-styled property price list (all property detail pages) */
+.price-list-content,
+.overview .price-list-content {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.price-list-content table,
+.price-list-content table.theme-price-table,
+.overview table.table-bordered,
+.overview table.theme-price-table,
+.middilesectionddetails table.theme-price-table,
+table.theme-price-table {
+  width: 100% !important;
+  max-width: 100%;
+  margin-bottom: 0;
+  background-color: #fff;
+  border-collapse: collapse !important;
+  font-family: Graphiklcg, sans-serif;
+  border: 1px solid #dee2e6 !important;
+}
+
+.price-list-content table thead th,
+.price-list-content .thead-dark th,
+.overview table.table-bordered thead th,
+.overview table.theme-price-table thead th,
+.middilesectionddetails table.theme-price-table thead th,
+table.theme-price-table thead th,
+table.theme-price-table .thead-dark th {
+  background-color: #212529 !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0;
+  text-align: center !important;
+  vertical-align: middle !important;
+  border: 1px solid #32383e !important;
+  padding: 0.95rem 0.85rem !important;
+}
+
+.price-list-content table td,
+.overview table.table-bordered td,
+.overview table.theme-price-table td,
+.middilesectionddetails table.theme-price-table td,
+table.theme-price-table td {
+  text-align: center !important;
+  vertical-align: middle !important;
+  border: 1px solid #dee2e6 !important;
+  padding: 0.95rem 0.85rem !important;
+  color: #212529 !important;
+  font-size: 0.95rem !important;
+  font-weight: 400 !important;
+  background-color: #fff;
+}
+
+.price-list-content table tbody tr:nth-child(even) td,
+.overview table.table-bordered tbody tr:nth-child(even) td,
+.overview table.theme-price-table tbody tr:nth-child(even) td,
+.middilesectionddetails table.theme-price-table tbody tr:nth-child(even) td,
+table.theme-price-table tbody tr:nth-child(even) td {
+  background-color: #f8f9fa !important;
+}
+
+.price-list-content table a,
+table.theme-price-table a {
+  color: #c09665 !important;
+  text-decoration: underline;
+}
+
+.price-list-content a.price-list-get-quote,
+table.theme-price-table a.price-list-get-quote {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: #1a1a1a;
+  color: #fff !important;
+  text-decoration: none !important;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.price-list-content a.price-list-get-quote:hover,
+table.theme-price-table a.price-list-get-quote:hover {
+  background: #000;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.price-list-content p:empty,
+.price-list-content p:has(> br:only-child) {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .price-list-content table th,
+  .price-list-content table td,
+  table.theme-price-table th,
+  table.theme-price-table td {
+    font-size: 0.82rem !important;
+    padding: 0.7rem 0.45rem !important;
+    white-space: nowrap;
+  }
+}
+
+/* Property gallery: keep consistent tile sizes on all screens */
+@media (max-width: 767px) {
+  .gallery {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    height: auto;
+    gap: 8px;
+  }
+
+  .gallery > a:not(.clink) {
+    height: 240px;
+  }
+
+  .gallery a:nth-child(1) {
+    grid-row: auto;
+    height: 280px;
+  }
+
+  .gallery .clink {
+    margin-top: 6px;
+  }
+}
+
+/* Property card titles: one line + ellipsis so all card boxes stay equal height */
+.proboxcattext .details_meta-property_title,
+.proboxcattext h1.details_meta-property_title,
+.proboxcattext h3.details_meta-property_title,
+.simir .details_meta-property_title,
+.property-detail-similar-props-carousel .details_meta-property_title,
+.property-card .card-title,
+.location-property-card-link .locatext h6 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.35;
+  max-width: 100%;
+  margin-bottom: 8px;
+}
+
+.proboxcattext .details_meta-property_title a,
+.proboxcattext h1.details_meta-property_title a,
+.proboxcattext h3.details_meta-property_title a,
+.simir .details_meta-property_title a,
+.property-detail-similar-props-carousel .details_meta-property_title a,
+.property-card .card-title a,
+.location-property-card-link .locatext h6 a {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.sampletext > p,
+.sampletext > p a,
+.new_developments-list_item_title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.sampletext > p a {
+  display: block;
+}
+
+/* Listing cards: keep sharp image framing on all breakpoints */
+.productlistsec .proboxcatimg {
+  aspect-ratio: 3 / 2;
+}
+
+@media (max-width: 767px) {
+  .productlistsec .proboxcat {
+    margin-bottom: 18px;
+  }
+
+  .productlistsec .proboxcatimg {
+    aspect-ratio: 16 / 10;
+  }
+
+  .productlistsec .proboxcattext {
+    padding: 16px 14px 20px;
+  }
+
+  .productlistsec .details_price-aed {
+    font-size: 1.25rem;
+  }
+}

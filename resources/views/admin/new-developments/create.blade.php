@@ -1,0 +1,127 @@
+@extends('layouts.admin')
+
+@section('title', 'Add New Development')
+
+@section('content')
+
+                <!-- Header -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h1 class="h3 mb-1">Add New Development</h1>
+                                <p class="text-muted mb-0">Add a property to the New Developments section</p>
+                            </div>
+                            <div>
+                                <a href="{{ route('new-developments.index') }}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>Back to New Developments
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Development Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="{{ route('new-developments.store') }}">
+                                    @csrf
+                                    
+                                    <div class="mb-3">
+                                        <label for="property_id" class="form-label">Property <span class="text-danger">*</span></label>
+                                        <select class="form-select select2-property @error('property_id') is-invalid @enderror" 
+                                                id="property_id" 
+                                                name="property_id" 
+                                                required>
+                                            <option value="">Select a property...</option>
+                                            @foreach($properties as $property)
+                                                <option value="{{ $property->id }}" {{ old('property_id') == $property->id ? 'selected' : '' }}>
+                                                    {{ $property->name }} 
+                                                    @if($property->location)
+                                                        - {{ $property->location->name }}
+                                                    @endif
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('property_id')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        @if($properties->isEmpty())
+                                            <div class="form-text text-warning">
+                                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                                All active properties have already been added to New Developments.
+                                            </div>
+                                        @else
+                                            <div class="form-text">Select a property to add to the New Developments section</div>
+                                        @endif
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="sort_order" class="form-label">Sort Order</label>
+                                        <input type="number" 
+                                               class="form-control @error('sort_order') is-invalid @enderror" 
+                                               id="sort_order" 
+                                               name="sort_order" 
+                                               value="{{ old('sort_order') }}" 
+                                               min="0"
+                                               placeholder="Auto (will be set automatically if left empty)">
+                                        @error('sort_order')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                        <div class="form-text">Lower numbers appear first. Leave empty to add at the end.</div>
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary" {{ $properties->isEmpty() ? 'disabled' : '' }}>
+                                            <i class="bi bi-check-circle me-2"></i>Add Development
+                                        </button>
+                                        <a href="{{ route('new-developments.index') }}" class="btn btn-outline-secondary">
+                                            <i class="bi bi-x-circle me-2"></i>Cancel
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Help Panel -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="card-title mb-0">Field Guidelines</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <strong>Property</strong>
+                                    <p class="small text-muted mb-1">Select a property from the dropdown. Only active properties that haven't been added yet are shown.</p>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Sort Order</strong>
+                                    <p class="small text-muted mb-1">Controls the display order. Lower numbers appear first. You can also reorder items by dragging them on the list page.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    // Initialize Select2 for property dropdown
+    $('#property_id').select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Select a property...',
+        allowClear: true,
+        width: '100%'
+    });
+});
+</script>
+@endpush
+@endsection
+

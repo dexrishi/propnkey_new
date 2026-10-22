@@ -1,0 +1,453 @@
+@media only screen and (max-width: 1200px) {
+    .middlefooter {
+        padding: 20px 24px;
+        width: 990px;
+
+    }
+    .inf a {
+        font-size: 14px;
+    }
+    .hero_title {
+        text-align: center;
+        font-size: 4.525rem;
+    }
+    .hero_sub-title {
+        margin-left: 0;
+    }
+    .hero_description{
+        margin: auto;
+        text-align: center;
+    }
+    .videosec video {
+        height: 470px;
+        object-fit: cover;
+    }
+    .develp {
+        padding-top: 150px;
+        padding-bottom: 50px;
+    }
+    .team-grid {
+        grid-template-columns: 1fr 1fr ;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .contact_info-contact_form_heading {
+        font-size: 3rem;
+    }
+  .calb{
+    display: none;
+  }
+  .leftbbox {
+    justify-content: center;
+}
+.middlefooter {
+    width: 722px;
+}
+.hero_title {
+    text-align: center;
+    font-size: 3.525rem;
+}
+.serchfilter {
+    width: 544px;
+}
+.nav-tabs .nav-item {
+    margin-bottom: 5px;
+}
+.nav-tabs .nav-link {
+    width: 160px;
+    font-size: 13px;
+}
+.new_developments-h1 {
+
+    font-size: 3rem;
+    text-align: center;
+}
+.new_developments-text {
+    margin: auto;
+    text-align: center;
+}
+.develp {
+    padding-top: 50px;
+}
+.stitle {
+    letter-spacing: 0px;
+    text-align: center;
+}
+.navbar-contact-row_value-link {
+    color: #fff !important;
+    font-size: 13px;
+}
+.navlisk ul li {
+    font-size: 26px;
+}
+.abtsecond {
+       
+    padding-top: 50px;
+}
+.contact_info-contact_form {
+    padding-left: 40px;
+}
+.page_header-heading {
+    font-size: 7.3rem;
+
+}
+.btn_btn a {
+    min-width: 164px;
+}
+.property_detail-features_box {
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    padding: 1.0rem .5rem;
+}
+}
+@media only screen and (max-width: 767px) {
+    .property_detail-features_heading {
+        font-size: 2.875rem;
+    }
+    .asuPri {
+        margin-left: inherit;
+        position: relative;
+        right: inherit;
+        bottom: 8px;
+        max-width: 425px;
+        color: #fff;
+    }
+    .btn_btn {
+        margin-left: inherit;
+        position: relative;
+    }
+    .before_footer-paragraph {
+        letter-spacing: 0;
+        font-size: 2.1rem;
+ 
+    }
+    .property_intro_component {
+        min-height: 532px;
+        padding-top: 100px;
+    }
+    .about_services-box_paragraph {
+        font-size: 1rem;
+    }
+    .about_services-box_heading {
+        letter-spacing: -1.5px;
+        font-size: 2rem;
+    }
+    .page_header-heading {
+        font-size: 5.3rem;
+        letter-spacing: 0;
+    }
+    .services_cta_component p {
+        width: auto;
+        margin-top: 24px;
+        padding-bottom: 30px;
+    }
+    .team-intro_heading {
+        font-size: 4rem;
+    }
+    .infocus-counter_title {
+        font-size: 3.25rem;
+    }
+    .infocus-intro_p {
+        font-size: 1rem;
+    }
+    .infocus-intro_heading {
+
+        font-size: 3rem;
+    }
+    .middlefooter{
+        display: none;
+    }
+    .hero_title {
+        font-size: 2.525rem;
+        letter-spacing: 0;
+    }
+    .hero_sub-title {
+        font-size: 3rem;
+    }
+    .hero_title-wrapper {
+        padding-bottom: 3.25rem;
+    }
+    .search_form-submit {
+        padding: 25px 16px;
+        line-height: 18px;
+    }
+    .projextt .owl-nav{
+        display: none;
+    }
+    .num{
+        display: none;
+    }
+    .pricelist {
+        display: block;
+    }
+    .private_property-button {
+        font-size: 14px;
+    }
+    .stitle {
+        letter-spacing: 0px;
+        font-size: 3rem;
+    }
+    .our_services-heading {
+        font-size: 3rem;
+        margin-bottom: 2rem;
+    }
+    .ptb {
+        padding: 30px 0px;
+    }
+    .our_services_right_box-button {
+        font-size: 16px;
+        margin: auto;
+    }
+    .bold-text {
+        font-size: 5rem;
+    }
+    .about_container-heading{
+        font-size: 3rem;
+    }
+    .abttext {
+        padding-left: 0;
+        margin-top: 105px;
+    }
+    .gbox {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .glist{
+        margin-bottom: 20px;
+    }
+    .offcanvas {
+        overflow-y: scroll;
+    }
+    .navlisk ul li {
+        text-align: left;
+    }
+    .navbar19_tagline {
+        font-size: 20px;
+    }
+    .undersec {
+        display: block;
+    }
+    .location .nav-pills {
+
+        justify-content: flex-start;
+        overflow-x: scroll;
+        flex-wrap: nowrap;
+    }
+    .location .nav-pills .nav-link {
+        font-size: 12px;
+        min-width: 182px;
+    }
+    .projextt .nav-pills {
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+    }
+    .projextt .nav-pills .nav-item {
+        min-width: 149px;
+        font-size: 12px;
+    }
+    
+    .logobox {
+        text-align: left;
+    }
+    .logobox .social ul {
+        text-align: left;
+    }
+    .lastfooter .social ul li {
+        margin: 0px 6px;
+    }
+    .lastfooter {
+        padding: 30px 0px;
+    }
+    .prolist {
+        background: #0D0D11;
+        padding: 30px 0px ;
+    }
+    .team-grid {
+        grid-template-columns: 1fr  ;
+    }
+    .abtfirst p {
+        width: auto;
+        margin: auto;
+        margin-top: 50px;
+    }
+    .section_bottom-content p {
+        width: auto;
+        margin: auto;
+        margin-top: 50px;
+    }
+    .our-story-heading_component {
+        font-size: 4.375rem;
+
+    }
+    .our-story-heading_welcome {
+        font-size: 2rem;
+    }
+    .properties_intro-heading {
+        font-size: 5.375rem;
+
+    }
+    .properties_intro-sub_heading {
+
+        font-size: 3rem;
+
+    }
+}
+@media only screen and (max-width: 545px) {
+    .overview ul {
+        padding-left: 0;
+    }
+    .conectivity-div li {
+        margin-bottom: 20px;
+    }
+    .property_intro_component {
+        padding-top: 60px;
+    }
+    .property_detail-features_heading {
+        font-size: 2rem;
+        letter-spacing: 0;
+    }
+    .property_detail-features_box_wrapper {
+        grid-template-columns: 1fr 1fr;
+    ;
+    }
+    .services-box {
+        padding-top: 1rem;
+        margin-bottom: 0;
+    }
+    .services-box_heading {
+        font-size: 24px;
+    }
+    .property_inquiry-heading {
+        font-size: 2rem;
+    }
+    .property_inquiry_component {
+        padding: 30px;
+    }
+    .before_footer-paragraph {
+        font-size: 1.6rem;
+    }
+    .cta_component {
+ 
+        min-height: auto;
+        padding-top: 90px;
+        padding-bottom: 50px;
+    }
+    .properties_intro-heading {
+        font-size: 3.375rem;
+        letter-spacing: 0;
+    }
+    .properties_intro-sub_heading {
+        font-size: 2rem;
+    }
+    .luxury {
+        padding: 50px 0px;
+    }
+    .about_services-box {
+        flex-wrap: wrap;
+        padding-bottom: 2rem;
+    }
+    .services_cta_component {
+        min-height: auto;
+
+    }
+    .page_header-heading {
+        font-size: 3.0rem;
+        letter-spacing: 0;
+    }
+    .property_inquiry-submit {
+        padding: 15px 35px;
+    }
+    .contact_info-contact_form_heading {
+        font-size: 2rem;
+    }
+    .contact_details-meta_heading {
+        min-width: 75px;
+    }
+    .contact_details-meta_link {
+        font-size: .8rem;
+        color: #FFE !important;
+    }
+    .contact_info-contact_form {
+        padding-left: 0;
+        margin-top: 30px;
+    }
+    .contact_details-meta_text {
+        font-size: .8rem;
+    }
+    .page_header-heading.heading-style3-h1 {
+        font-size: 2rem;
+        margin-top: 30px;
+        
+        letter-spacing: 0;
+    }
+    .member_component {
+        padding: 1.0rem;
+    }
+    .member_show-more {
+        padding: 15px 11px;
+        font-size: .8rem;
+    }
+    .infocus-counter_description {
+        font-size: 1rem;
+    }
+    .bottom-content_caption {
+        font-size: 2rem;
+        padding-bottom: 50px;
+    }
+    .temboxtext p {
+        font-size: 1rem;
+        margin-top: 20px;
+    }
+    .our-story-heading_component {
+        font-size: 3.375rem;
+    }
+    .serchfilter {
+        width: 330px;
+    }
+    .serchfilter .nav-tabs{
+        display: block;
+    }
+    .serchfilter .nav-tabs .nav-link{
+        width: 100%;
+    }
+    .gbox {
+        grid-template-columns: 1fr 1fr ;
+    }
+    .our_services-link_text {
+
+        padding: 1rem 1rem 1rem 0;
+        font-size: 1.3rem;
+    }
+    .private_property-footer {
+        display: block;
+    }
+    .link_btn button {
+        padding: 13px 28px;
+        font-size: 1rem;
+    }
+    .private_properties_image {
+        aspect-ratio: 3 / 2;
+        height: 20rem;
+    }
+    .sampletext p a {
+        font-size: 18px;
+        font-family: Graphiklcg, sans-serif;
+    }
+    .new_developments-list_item_title {
+        font-size: 2.0rem;
+    }
+    .new_developments-h1 {
+        font-size: 2.2rem;
+        letter-spacing: 0;
+    }
+    .our_services-heading {
+        font-size: 2.2rem;
+    }
+    .locatext {
+        bottom: -70px;
+    }
+    .pricebox {
+        flex-direction: column;
+        gap: 10px;
+    }
+   
+}
