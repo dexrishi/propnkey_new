@@ -836,39 +836,9 @@
 
             <div class="overview mt-4">
                <h3 class="property_detail-features_heading">Price List</h3>
-               @if($property->price_list)
                <div class="price-list-content">
-                  {!! \App\Helpers\ConfigHelper::themePriceListHtml($property->price_list, $property->name) !!}
+                  {!! \App\Helpers\ConfigHelper::propertyPriceListHtml($property) !!}
                </div>
-               @else
-               <div class="price-list-content">
-                  <table class="table table-bordered text-center theme-price-table">
-                     <thead class="thead-dark">
-                        <tr>
-                           <th scope="col">Type</th>
-                           <th scope="col">Area (in SQ.FT)</th>
-                           <th scope="col">Price</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr>
-                           @php
-                              $isCommercialForPriceList = strtolower($property->propertyCategory->slug ?? '') === 'commercial'
-                                 || strtolower($property->propertyCategory->name ?? '') === 'commercial';
-                              $priceListType = $isCommercialForPriceList
-                                 ? ($property->propertyType->name ?? 'N/A')
-                                 : ($property->bedroomOptions && $property->bedroomOptions->count() > 0
-                                    ? $property->bedroomOptions->pluck('name')->join(', ')
-                                    : ($property->propertyType->name ?? 'N/A'));
-                           @endphp
-                           <td>{{ $priceListType }}</td>
-                           <td>{{ $property->area_sq_ft ?? 'N/A' }} sq.ft.</td>
-                           <td>{{ \App\Helpers\ConfigHelper::formatPrice($property->price, $property->price_unit) }}</td>
-                        </tr>
-                     </tbody>
-                  </table>
-               </div>
-               @endif
             </div>
 
                 @include('front.partials.property-faqs')
@@ -1041,6 +1011,13 @@
                         <div class="form-group">
                            <textarea name="message" class="form-control" id="enquiryMessage" cols="30" rows="3" placeholder="Message"></textarea>
                         </div>
+                        @php
+                           $recaptchaSiteKey = \App\Helpers\SiteConfigHelper::recaptchaSiteKey();
+                        @endphp
+                        <div class="form-group enquiry-recaptcha-wrap">
+                           <div id="enquiryRecaptcha"></div>
+                           <div id="enquiryRecaptchaError" class="enquiry-recaptcha-error" style="display:none;"></div>
+                        </div>
                         <div class="link_btn"> 
                            <button type="submit" name="submit" class="btn enquiry-submit-btn"><span>SUBMIT</span></button>
                         </div>
@@ -1196,6 +1173,10 @@
                   <div class="form-group">
                      <textarea name="message" class="form-control" id="modalEnquiryMessage" cols="30" rows="4" placeholder="Message"></textarea>
                   </div>
+                  <div class="form-group enquiry-recaptcha-wrap">
+                     <div id="modalEnquiryRecaptcha"></div>
+                     <div id="modalEnquiryRecaptchaError" class="enquiry-recaptcha-error" style="display:none;"></div>
+                  </div>
                   <div class="link_btn"> 
                      <button type="submit" name="submit" class="btn enquiry-submit-btn-modal"><span>SUBMIT</span></button>
                   </div>
@@ -1267,6 +1248,39 @@ $(document).ready(function() {
         separateDialCode: true,
     });
 
+    // Google reCAPTCHA for property enquiry forms
+    var enquiryRecaptchaWidgetId = null;
+    var modalEnquiryRecaptchaWidgetId = null;
+    var recaptchaSiteKey = @json(\App\Helpers\SiteConfigHelper::recaptchaSiteKey());
+
+    function renderEnquiryRecaptchas() {
+        if (typeof grecaptcha === 'undefined' || !grecaptcha.render) {
+            setTimeout(renderEnquiryRecaptchas, 120);
+            return;
+        }
+        if (document.getElementById('enquiryRecaptcha') && enquiryRecaptchaWidgetId === null) {
+            enquiryRecaptchaWidgetId = grecaptcha.render('enquiryRecaptcha', { sitekey: recaptchaSiteKey });
+        }
+        if (document.getElementById('modalEnquiryRecaptcha') && modalEnquiryRecaptchaWidgetId === null) {
+            modalEnquiryRecaptchaWidgetId = grecaptcha.render('modalEnquiryRecaptcha', { sitekey: recaptchaSiteKey });
+        }
+    }
+    renderEnquiryRecaptchas();
+
+    function showRecaptchaError(elId, message) {
+        var el = document.getElementById(elId);
+        if (!el) return;
+        el.textContent = message || 'Please complete the reCAPTCHA verification.';
+        el.style.display = 'block';
+    }
+
+    function hideRecaptchaError(elId) {
+        var el = document.getElementById(elId);
+        if (!el) return;
+        el.style.display = 'none';
+        el.textContent = '';
+    }
+
     // Handle right side form submission (enquiryForm)
     $('#enquiryForm').on('submit', function(e) {
         e.preventDefault();
@@ -1275,6 +1289,15 @@ $(document).ready(function() {
         var form = $(this);
         var submitBtn = form.find('.enquiry-submit-btn');
         var originalText = submitBtn.find('span').text();
+        hideRecaptchaError('enquiryRecaptchaError');
+
+        var recaptchaResponse = (enquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined')
+            ? grecaptcha.getResponse(enquiryRecaptchaWidgetId)
+            : '';
+        if (!recaptchaResponse) {
+            showRecaptchaError('enquiryRecaptchaError', 'Please complete the reCAPTCHA verification.');
+            return false;
+        }
         
         // Disable button and show loading
         submitBtn.prop('disabled', true);
@@ -1282,6 +1305,7 @@ $(document).ready(function() {
         
         // Create form data
         var formData = new FormData(this);
+        formData.set('g-recaptcha-response', recaptchaResponse);
         
         // Submit via AJAX
         $.ajax({
@@ -1302,6 +1326,9 @@ $(document).ready(function() {
                 
                 setTimeout(function() {
                     form[0].reset();
+                    if (enquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(enquiryRecaptchaWidgetId);
+                    }
                     submitBtn.find('span').text(originalText);
                     submitBtn.prop('disabled', false);
                     submitBtn.css('background', '');
@@ -1316,6 +1343,9 @@ $(document).ready(function() {
                     submitBtn.find('span').text(originalText);
                     submitBtn.prop('disabled', false);
                     submitBtn.css('background', '');
+                    if (enquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(enquiryRecaptchaWidgetId);
+                    }
                     
                     var errorMsg = 'An error occurred. Please try again.';
                     if (xhr.responseJSON) {
@@ -1327,6 +1357,9 @@ $(document).ready(function() {
                                 errors.push(value[0]);
                             });
                             errorMsg = errors.join('\n');
+                            if (xhr.responseJSON.errors['g-recaptcha-response']) {
+                                showRecaptchaError('enquiryRecaptchaError', xhr.responseJSON.errors['g-recaptcha-response'][0]);
+                            }
                         }
                     }
                     alert(errorMsg);
@@ -1345,6 +1378,15 @@ $(document).ready(function() {
         var form = $(this);
         var submitBtn = form.find('.enquiry-submit-btn-modal');
         var originalText = submitBtn.find('span').text();
+        hideRecaptchaError('modalEnquiryRecaptchaError');
+
+        var recaptchaResponse = (modalEnquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined')
+            ? grecaptcha.getResponse(modalEnquiryRecaptchaWidgetId)
+            : '';
+        if (!recaptchaResponse) {
+            showRecaptchaError('modalEnquiryRecaptchaError', 'Please complete the reCAPTCHA verification.');
+            return false;
+        }
         
         // Disable button and show loading
         submitBtn.prop('disabled', true);
@@ -1352,6 +1394,7 @@ $(document).ready(function() {
         
         // Create form data
         var formData = new FormData(this);
+        formData.set('g-recaptcha-response', recaptchaResponse);
         
         // Submit via AJAX
         $.ajax({
@@ -1373,6 +1416,9 @@ $(document).ready(function() {
                 setTimeout(function() {
                     form[0].reset();
                     $('#myModal').modal('hide');
+                    if (modalEnquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(modalEnquiryRecaptchaWidgetId);
+                    }
                     submitBtn.find('span').text(originalText);
                     submitBtn.prop('disabled', false);
                     submitBtn.css('background', '');
@@ -1387,6 +1433,9 @@ $(document).ready(function() {
                     submitBtn.find('span').text(originalText);
                     submitBtn.prop('disabled', false);
                     submitBtn.css('background', '');
+                    if (modalEnquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(modalEnquiryRecaptchaWidgetId);
+                    }
                     
                     var errorMsg = 'An error occurred. Please try again.';
                     if (xhr.responseJSON) {
@@ -1398,6 +1447,9 @@ $(document).ready(function() {
                                 errors.push(value[0]);
                             });
                             errorMsg = errors.join('\n');
+                            if (xhr.responseJSON.errors['g-recaptcha-response']) {
+                                showRecaptchaError('modalEnquiryRecaptchaError', xhr.responseJSON.errors['g-recaptcha-response'][0]);
+                            }
                         }
                     }
                     alert(errorMsg);

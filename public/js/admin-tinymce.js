@@ -147,11 +147,16 @@
         const initConfig = getTinyConfig(config);
 
         return new Promise(function (resolve, reject) {
+            const userSetup = typeof initConfig.setup === 'function' ? initConfig.setup : null;
+
             tinymce
                 .init(
                     Object.assign({}, initConfig, {
                         target: element,
                         setup: function (editor) {
+                            if (userSetup) {
+                                userSetup(editor);
+                            }
                             editor.on('init', function () {
                                 resolve(buildEditorApi(editor, element));
                             });

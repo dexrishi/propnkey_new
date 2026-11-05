@@ -73,6 +73,50 @@ class HomeController extends Controller
         
         return null;
     }
+
+    /**
+     * Property types belong to one category. Cross-category URLs like
+     * /resale-properties/apartments (apartments → residential) are fake — 301 to the real category URL.
+     */
+    protected function redirectIfTypeCategoryMismatch(
+        PropertyCategory $propertyCategory,
+        PropertyType $propertyType,
+        ?string $locationSlug = null,
+        $page = 1
+    ) {
+        if ($propertyType->property_category_id === null
+            || (int) $propertyType->property_category_id === (int) $propertyCategory->id) {
+            return null;
+        }
+
+        $canonicalCategory = PropertyCategory::where('id', $propertyType->property_category_id)
+            ->where('is_active', true)
+            ->first();
+
+        $pageParam = (is_numeric($page) && (int) $page > 1) ? (int) $page : null;
+
+        if (!$canonicalCategory) {
+            return redirect()->route('category.direct', array_filter([
+                'category_slug' => $propertyCategory->slug,
+                'page' => $pageParam,
+            ]), 301);
+        }
+
+        if ($locationSlug) {
+            return redirect()->route('category.propertytype.location.properties', array_filter([
+                'category_slug' => $canonicalCategory->slug,
+                'property_type_slug' => $propertyType->slug,
+                'location_slug' => $locationSlug,
+                'page' => $pageParam,
+            ]), 301);
+        }
+
+        return redirect()->route('category.propertytype.properties', array_filter([
+            'category_slug' => $canonicalCategory->slug,
+            'property_type_slug' => $propertyType->slug,
+            'page' => $pageParam,
+        ]), 301);
+    }
     
     public function index()
     {
@@ -997,58 +1041,6 @@ class HomeController extends Controller
     }
 
     /**
-     * View all properties
-     */
-    public function viewAllProperties(Request $request)
-    {
-        $query = Property::with(['images', 'location', 'propertyType', 'propertyCategory'])
-            ->where('is_active', true);
-
-        // Apply filters
-        if ($request->filled('category')) {
-            // Handle both ID and slug for category
-            $category = PropertyCategory::where('slug', $request->category)->orWhere('id', $request->category)->first();
-            if ($category) {
-                $query->where('property_category_id', $category->id);
-            }
-        }
-
-        if ($request->filled('location')) {
-            // Handle both ID and slug for location
-            $location = Location::where('slug', $request->location)->orWhere('id', $request->location)->first();
-            if ($location) {
-                $query->where('location_id', $location->id);
-            }
-        }
-
-        if ($request->filled('type')) {
-            // Handle both ID and slug for type
-            $type = PropertyType::where('slug', $request->type)->orWhere('id', $request->type)->first();
-            if ($type) {
-                $query->where('property_type_id', $type->id);
-            }
-        }
-
-        $properties = $query->orderByRaw('CASE WHEN is_featured = 1 THEN 0 ELSE 1 END')
-                ->orderByRaw('CASE WHEN location_id = 1 THEN 0 ELSE 1 END')
-            ->orderBy('created_at', 'desc')
-            ->paginate(12);
-            
-        $propertyCategories = PropertyCategory::active()->ordered()->get();
-        $locations = Location::active()->ordered()->get();
-        $propertyTypes = PropertyType::active()->ordered()->get();
-        
-        // Check slug_list for meta data
-        $slugListMeta = $this->getMetaFromSlugList('all-properties-page');
-        $pageMeta = $slugListMeta ?: [
-            'meta_title' => 'All Properties',
-            'meta_desc' => 'Browse all available properties'
-        ];
-        
-        return view('front.all-properties', compact('properties', 'propertyCategories', 'locations', 'propertyTypes', 'pageMeta'));
-    }
-
-    /**
      * Show all properties with lazy loading (8 per page)
      */
     public function allPropertiesLazy(Request $request, $page = 1)
@@ -1279,6 +1271,10 @@ class HomeController extends Controller
                 ->first();
             
             if ($propertyType) {
+                // Fake cross-category type URLs → canonical category+type URL
+                if ($redirect = $this->redirectIfTypeCategoryMismatch($propertyCategory, $propertyType)) {
+                    return $redirect;
+                }
                 // It's a property type slug, filter by it
                 $propertyTypeSlug = $page;
                 $query->where('property_type_id', $propertyType->id);
@@ -1724,6 +1720,10 @@ class HomeController extends Controller
             // If neither, return 404
             abort(404);
         }
+
+        if ($redirect = $this->redirectIfTypeCategoryMismatch($propertyCategory, $propertyType, null, $page)) {
+            return $redirect;
+        }
         
         $query = Property::with(['images', 'location', 'propertyType', 'propertyCategory'])
             ->where('property_category_id', $propertyCategory->id)
@@ -1795,11 +1795,14 @@ class HomeController extends Controller
         }
         
         $propertyCategory = PropertyCategory::where('slug', $categorySlug)->where('is_active', true)->firstOrFail();
-        // Types are shared across categories — do not require property_types.property_category_id match
         $propertyType = PropertyType::where('slug', $propertyTypeSlug)
             ->where('is_active', true)
             ->firstOrFail();
         $location = Location::where('slug', $location_slug)->where('is_active', true)->firstOrFail();
+
+        if ($redirect = $this->redirectIfTypeCategoryMismatch($propertyCategory, $propertyType, $location->slug, $page)) {
+            return $redirect;
+        }
         
         $query = Property::with(['images', 'location', 'propertyType', 'propertyCategory'])
             ->where('property_category_id', $propertyCategory->id)

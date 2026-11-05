@@ -85,10 +85,6 @@ class PropertySchema
             'floorSize' => self::floorSize($property),
         ];
 
-        if ($price !== null) {
-            $place['offers'] = ['@id' => $offerId];
-        }
-
         $listing = [
             '@type' => 'RealEstateListing',
             '@id' => $listingId,
@@ -96,10 +92,7 @@ class PropertySchema
             'name' => self::plain($property->name),
             'description' => $description,
             'inLanguage' => 'en-IN',
-            'datePosted' => optional($property->created_at)->toDateString(),
-            'dateModified' => optional($property->updated_at)->toDateString(),
             'mainEntity' => ['@id' => $projectId],
-            'about' => ['@id' => $projectId],
             'breadcrumb' => ['@id' => $breadcrumbId],
             'publisher' => ['@id' => $organizationId],
         ];
@@ -265,12 +258,20 @@ class PropertySchema
 
     private static function placeLabel(Property $property): string
     {
-        $parts = array_filter([
-            self::locality($property),
-            self::plain(optional($property->location)->name),
-        ]);
+        $city = self::plain(optional($property->location)->name);
+        $locality = self::locality($property);
 
-        return implode(', ', $parts);
+        if ($city !== '' && $locality !== '') {
+            $locality = (string) preg_replace('/^' . preg_quote($city, '/') . '\s*,?\s*/iu', '', $locality);
+            $locality = (string) preg_replace('/,?\s*' . preg_quote($city, '/') . '$/iu', '', $locality);
+            $locality = trim($locality, " \t\n\r\0\x0B,");
+        }
+
+        if ($locality !== '' && $city !== '') {
+            return $locality . ', ' . $city;
+        }
+
+        return $locality !== '' ? $locality : $city;
     }
 
     private static function locality(Property $property): string
@@ -286,7 +287,7 @@ class PropertySchema
     private static function address(Property $property): ?array
     {
         $city = self::plain(optional($property->location)->name);
-        $locality = self::locality($property);
+        $addressLocality = self::placeLabel($property);
         $street = self::plain($property->address, 240);
         $region = self::CITY_REGIONS[strtolower($city)] ?? null;
         $postalCode = null;
@@ -295,23 +296,18 @@ class PropertySchema
             $postalCode = $match[1];
         }
 
-        if ($city !== '' && $locality !== '') {
-            $locality = trim((string) preg_replace('/,?\s*' . preg_quote($city, '/') . '$/iu', '', $locality));
-        }
-
         if ($street !== '' && ($street === self::plain($property->name) || mb_strlen($street) < 8)) {
             $street = '';
         }
 
-        if ($locality === '' && $city === '' && $street === '') {
+        if ($addressLocality === '' && $street === '') {
             return null;
         }
 
         return self::prune([
             '@type' => 'PostalAddress',
             'streetAddress' => $street,
-            'addressLocality' => $locality,
-            'addressCity' => $city,
+            'addressLocality' => $addressLocality,
             'addressRegion' => $region,
             'postalCode' => $postalCode,
             'addressCountry' => 'IN',
@@ -438,13 +434,7 @@ class PropertySchema
             $items[] = self::propertyValue('Configurations', $configurations);
         }
 
-        $area = self::areaNumber($property);
-        if ($area !== null) {
-            $formatted = floor($area) == $area
-                ? number_format($area)
-                : number_format($area, 2);
-            $items[] = self::propertyValue('Advertised Area', $formatted . ' sq. ft.');
-        }
+        // Area already exposed via floorSize — skip duplicate "Advertised Area"
 
         if ($property->is_sold) {
             $items[] = self::propertyValue('Project Status', 'Sold');
@@ -549,35 +539,17 @@ class PropertySchema
         int $price,
         bool $isRental
     ): array {
-        $categoryName = self::plain(optional($property->propertyCategory)->name);
-        $offerName = self::plain($property->name);
-        if ($isRental) {
-            $offerName .= ' Rental Listing';
-        } elseif ($categoryName !== '') {
-            $offerName .= ' ' . $categoryName . ' Listing';
-        } else {
-            $offerName .= ' Listing';
-        }
-
         $offer = [
             '@type' => 'Offer',
             '@id' => $offerId,
             'url' => $pageUrl,
-            'name' => $offerName,
+            'name' => self::plain($property->name),
             'price' => $price,
             'priceCurrency' => 'INR',
             'availability' => self::availability($property),
-            'businessFunction' => $isRental ? 'https://schema.org/LeaseOut' : 'https://schema.org/Sell',
             'itemOffered' => ['@id' => $projectId],
             'seller' => ['@id' => $organizationId],
         ];
-
-        $categorySlug = strtolower((string) ($property->propertyCategory->slug ?? ''));
-        if ($categorySlug === 'resale') {
-            $offer['itemCondition'] = 'https://schema.org/UsedCondition';
-        } elseif (!$isRental) {
-            $offer['itemCondition'] = 'https://schema.org/NewCondition';
-        }
 
         if ($isRental) {
             $offer['priceSpecification'] = [

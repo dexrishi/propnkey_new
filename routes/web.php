@@ -346,8 +346,7 @@ if ($legacyLocationSlugs !== '') {
         ->where('location_slug', $legacyLocationSlugs)
         ->where('page', '[a-z0-9\-]+');
 }
-Route::get('/all-properties-page', [HomeController::class, 'viewAllProperties'])->name('properties.all');
-Route::get('/all-properties/{page?}', [HomeController::class, 'allPropertiesLazy'])->name('properties.lazy');
+Route::get('/all-properties/{page?}', [HomeController::class, 'allPropertiesLazy'])->name('properties.all');
 // Location-only route (e.g., /properties-in-gurgaon) - must come before /properties/{category_slug} to prevent conflicts
 Route::get('/properties-in-{location_slug}/{page?}', [HomeController::class, 'locationProperties'])->name('location.properties');
 // Rise routes (e.g., /high-rise-properties, /low-rise-properties-in-gurgaon) - before category pattern routes
@@ -435,11 +434,22 @@ Route::get('/{property_type_slug}-in-{location_slug}/{page?}', [HomeController::
     ->where('location_slug', '[a-z0-9\-]+')
     ->name('property.type.location');
 // Category + Condition + Property Type route (e.g., /commercial-properties/resale/apartments) - must come before category + condition route
-Route::get('/{category_slug}-properties/{condition_slug}/{property_type_slug}/{page?}', [HomeController::class, 'categoryConditionPropertyTypeProperties'])->name('category.condition.propertytype.properties');
-// Category + Property Type route (e.g., /residential-properties/apartments) - must come before category-only route
-Route::get('/{category_slug}-properties/{property_type_slug}/{page?}', [HomeController::class, 'categoryPropertyTypeProperties'])->name('category.propertytype.properties');
+Route::get('/{category_slug}-properties/{condition_slug}/{property_type_slug}/{page?}', [HomeController::class, 'categoryConditionPropertyTypeProperties'])
+    ->where('category_slug', '[a-z0-9\-]+')
+    ->where('condition_slug', '[a-z0-9\-]+')
+    ->where('property_type_slug', '[a-z0-9\-]+')
+    ->name('category.condition.propertytype.properties');
+// Category + Property Type route (e.g., /residential-properties/apartments, /holiday-homes-properties/villa)
+// where() is required so hyphenated category slugs (holiday-homes) can match — default [^/\-] rejects them
+Route::get('/{category_slug}-properties/{property_type_slug}/{page?}', [HomeController::class, 'categoryPropertyTypeProperties'])
+    ->where('category_slug', '[a-z0-9\-]+')
+    ->where('property_type_slug', '[a-z0-9\-]+')
+    ->name('category.propertytype.properties');
 // Category + Condition route (e.g., /commercial-properties/resale) - must come before category-only route
-Route::get('/{category_slug}-properties/{condition_slug}/{page?}', [HomeController::class, 'categoryConditionProperties'])->name('category.condition.properties');
+Route::get('/{category_slug}-properties/{condition_slug}/{page?}', [HomeController::class, 'categoryConditionProperties'])
+    ->where('category_slug', '[a-z0-9\-]+')
+    ->where('condition_slug', '[a-z0-9\-]+')
+    ->name('category.condition.properties');
 
 // Category-only route (e.g., /residential-properties, /commercial-properties, /holiday-homes-properties) - must be after pattern routes, defaults to "new" condition
 Route::get('/{category_slug}-properties/{page?}', [HomeController::class, 'categoryProperties'])

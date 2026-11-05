@@ -111,9 +111,7 @@
                   <li> <a href="#gal" class="now"><i class="fal fa-photo-video"></i> Gallery</a> </li>
                   <li> <a href="#amen" class="now"><i class="fal fa-home"></i> Amenities</a> </li>
                   <li> <a href="#rent" class="now"><i class="fal fa-rupee-sign"></i> Rent details</a> </li>
-                  @if(!empty(trim(strip_tags($property->price_list ?? ''))))
                   <li> <a href="#price-list" class="now"><i class="fal fa-list-alt"></i> Price List</a> </li>
-                  @endif
                   @if($property->faqs->count())
                   <li> <a href="#faq" class="now"><i class="fal fa-question-circle"></i> FAQs</a> </li>
                   @endif
@@ -163,14 +161,12 @@
             </div>
             @endif
 
-            @if(!empty(trim(strip_tags($property->price_list ?? ''))))
             <div class="overview mt-4" id="price-list">
                <h3 class="property_detail-features_heading">Price List</h3>
                <div class="price-list-content">
-                  {!! \App\Helpers\ConfigHelper::themePriceListHtml($property->price_list, $property->name) !!}
+                  {!! \App\Helpers\ConfigHelper::propertyPriceListHtml($property) !!}
                </div>
             </div>
-            @endif
             
             <div class="gallery-sec mt-4" id="gal">
                <h3 class="property_detail-features_heading">Property Gallery</h3>
@@ -423,6 +419,10 @@
                               <div class="form-group">
                                  <textarea name="message" class="form-control" id="rentEnquiryMessage" cols="30" rows="3" placeholder="Message"></textarea>
                               </div>
+                              <div class="form-group enquiry-recaptcha-wrap">
+                                 <div id="rentEnquiryRecaptcha"></div>
+                                 <div id="rentEnquiryRecaptchaError" class="enquiry-recaptcha-error" style="display:none;"></div>
+                              </div>
                               <div class="link_btn"> 
                                  <button type="submit" name="submit" class="btn enquiry-submit-btn-rent"><span>SUBMIT</span></button>
                               </div>
@@ -650,6 +650,21 @@ $(document).ready(function() {
         separateDialCode: true,
     });
 
+    // Google reCAPTCHA for rent enquiry form
+    var rentEnquiryRecaptchaWidgetId = null;
+    var rentRecaptchaSiteKey = @json(\App\Helpers\SiteConfigHelper::recaptchaSiteKey());
+
+    function renderRentEnquiryRecaptcha() {
+        if (typeof grecaptcha === 'undefined' || !grecaptcha.render) {
+            setTimeout(renderRentEnquiryRecaptcha, 120);
+            return;
+        }
+        if (document.getElementById('rentEnquiryRecaptcha') && rentEnquiryRecaptchaWidgetId === null) {
+            rentEnquiryRecaptchaWidgetId = grecaptcha.render('rentEnquiryRecaptcha', { sitekey: rentRecaptchaSiteKey });
+        }
+    }
+    renderRentEnquiryRecaptcha();
+
     // Handle rent property form submission (rentEnquiryForm)
     $('#rentEnquiryForm').on('submit', function(e) {
         e.preventDefault();
@@ -658,6 +673,19 @@ $(document).ready(function() {
         var form = $(this);
         var submitBtn = form.find('.enquiry-submit-btn-rent');
         var originalText = submitBtn.find('span').text();
+        var errEl = document.getElementById('rentEnquiryRecaptchaError');
+        if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+
+        var recaptchaResponse = (rentEnquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined')
+            ? grecaptcha.getResponse(rentEnquiryRecaptchaWidgetId)
+            : '';
+        if (!recaptchaResponse) {
+            if (errEl) {
+                errEl.textContent = 'Please complete the reCAPTCHA verification.';
+                errEl.style.display = 'block';
+            }
+            return false;
+        }
         
         // Disable button and show loading
         submitBtn.prop('disabled', true);
@@ -665,6 +693,7 @@ $(document).ready(function() {
         
         // Create form data
         var formData = new FormData(this);
+        formData.set('g-recaptcha-response', recaptchaResponse);
         
         // Submit via AJAX
         $.ajax({
@@ -685,6 +714,9 @@ $(document).ready(function() {
                 
                 setTimeout(function() {
                     form[0].reset();
+                    if (rentEnquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(rentEnquiryRecaptchaWidgetId);
+                    }
                     submitBtn.find('span').text(originalText);
                     submitBtn.prop('disabled', false);
                     submitBtn.css('background', '');
@@ -699,6 +731,9 @@ $(document).ready(function() {
                     submitBtn.find('span').text(originalText);
                     submitBtn.prop('disabled', false);
                     submitBtn.css('background', '');
+                    if (rentEnquiryRecaptchaWidgetId !== null && typeof grecaptcha !== 'undefined') {
+                        grecaptcha.reset(rentEnquiryRecaptchaWidgetId);
+                    }
                     
                     var errorMsg = 'An error occurred. Please try again.';
                     if (xhr.responseJSON) {
@@ -710,6 +745,10 @@ $(document).ready(function() {
                                 errors.push(value[0]);
                             });
                             errorMsg = errors.join('\n');
+                            if (errEl && xhr.responseJSON.errors['g-recaptcha-response']) {
+                                errEl.textContent = xhr.responseJSON.errors['g-recaptcha-response'][0];
+                                errEl.style.display = 'block';
+                            }
                         }
                     }
                     alert(errorMsg);

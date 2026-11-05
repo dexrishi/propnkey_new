@@ -236,6 +236,140 @@ class ConfigHelper
     }
 
     /**
+     * Parse saved price_list HTML into simple Type / Area / Price rows for the admin builder.
+     *
+     * @return array<int, array{type: string, area: string, price: string}>
+     */
+    public static function parsePriceListRows(?string $html): array
+    {
+        if (blank($html) || blank(trim(strip_tags($html)))) {
+            return [];
+        }
+
+        libxml_use_internal_errors(true);
+        $dom = new \DOMDocument('1.0', 'UTF-8');
+        $dom->loadHTML('<?xml encoding="UTF-8"><div id="pl-parse">' . $html . '</div>', LIBXML_HTML_NODEFDTD);
+        $xpath = new \DOMXPath($dom);
+        $rows = [];
+
+        foreach ($xpath->query('//*[@id="pl-parse"]//table') as $table) {
+            $trNodes = $xpath->query('.//tbody/tr', $table);
+            if ($trNodes->length === 0) {
+                $trNodes = $xpath->query('./tr|.//tr', $table);
+            }
+
+            foreach ($trNodes as $tr) {
+                /** @var \DOMElement $tr */
+                $cells = $xpath->query('./th|./td', $tr);
+                if ($cells->length < 2) {
+                    continue;
+                }
+
+                $values = [];
+                foreach ($cells as $cell) {
+                    $values[] = trim(preg_replace('/\s+/u', ' ', html_entity_decode($cell->textContent ?? '', ENT_QUOTES, 'UTF-8')) ?? '');
+                }
+
+                // Skip header-like rows
+                $joined = strtolower(implode(' ', $values));
+                if (str_contains($joined, 'type') && (str_contains($joined, 'area') || str_contains($joined, 'price'))) {
+                    continue;
+                }
+
+                $type = $values[0] ?? '';
+                $area = $values[1] ?? '';
+                $price = $values[count($values) - 1] ?? '';
+
+                // Ignore Get Quote placeholder cells in the builder price field
+                if (preg_match('/get\s*quote|get\s*price/i', $price)) {
+                    $price = '';
+                }
+
+                if ($type === '' && $area === '' && $price === '') {
+                    continue;
+                }
+
+                $rows[] = [
+                    'type' => $type,
+                    'area' => $area,
+                    'price' => $price,
+                ];
+            }
+        }
+
+        libxml_clear_errors();
+
+        return $rows;
+    }
+
+    /**
+     * Render a property's Price List with one consistent theme table UI.
+     * Uses saved price_list HTML when present; otherwise builds rows from bedroom configs.
+     */
+    public static function propertyPriceListHtml($property): string
+    {
+        $saved = $property->price_list ?? '';
+        if (!blank(trim(strip_tags($saved)))) {
+            return self::themePriceListHtml($saved, $property->name ?? null);
+        }
+
+        return self::themePriceListHtml(
+            self::buildFallbackPriceListTable($property),
+            $property->name ?? null
+        );
+    }
+
+    /**
+     * Build a Type / Area / Price table when no editor price_list exists.
+     * One row per bedroom config (or property type for commercial).
+     */
+    public static function buildFallbackPriceListTable($property): string
+    {
+        $isCommercial = strtolower($property->propertyCategory->slug ?? '') === 'commercial'
+            || strtolower($property->propertyCategory->name ?? '') === 'commercial';
+
+        $bedroomOptions = collect($property->bedroomOptions ?? []);
+        $types = [];
+        if (!$isCommercial && $bedroomOptions->isNotEmpty()) {
+            $types = $bedroomOptions
+                ->sortBy(fn ($opt) => [(int) ($opt->sort_order ?? 0), (string) $opt->name])
+                ->pluck('name')
+                ->filter()
+                ->values()
+                ->all();
+        }
+
+        if (empty($types)) {
+            $types = [($property->propertyType->name ?? null) ?: 'N/A'];
+        }
+
+        $areaLabel = !empty($property->area_sq_ft)
+            ? e($property->area_sq_ft) . ' sq.ft.'
+            : '—';
+        $priceLabel = e(self::formatPrice($property->price ?? null, $property->price_unit ?? null));
+
+        $rows = '';
+        foreach ($types as $index => $type) {
+            $area = $index === 0 ? $areaLabel : '—';
+            $price = $index === 0 ? $priceLabel : '—';
+            $rows .= '<tr>'
+                . '<td>' . e($type) . '</td>'
+                . '<td>' . $area . '</td>'
+                . '<td>' . $price . '</td>'
+                . '</tr>';
+        }
+
+        return '<table>'
+            . '<thead><tr>'
+            . '<th scope="col">Type</th>'
+            . '<th scope="col">Area (in SQ.FT)</th>'
+            . '<th scope="col">Price</th>'
+            . '</tr></thead>'
+            . '<tbody>' . $rows . '</tbody>'
+            . '</table>';
+    }
+
+    /**
      * Normalize TinyMCE/CKEditor price-list HTML to the front theme table markup.
      * First data row keeps its price; extra rows show a Get Quote button.
      */
@@ -275,11 +409,13 @@ class ConfigHelper
         // Apply theme table classes (match theme/detail.php)
         $html = preg_replace_callback('/<table\b([^>]*)>/i', function (array $matches) {
             $attrs = $matches[1] ?? '';
+            $themeClasses = ['table', 'table-bordered', 'text-center', 'theme-price-table'];
             if (preg_match('/\bclass\s*=\s*([\'"])(.*?)\1/i', $attrs, $classMatch)) {
-                $classes = trim($classMatch[2] . ' table table-bordered text-center theme-price-table');
+                $existing = preg_split('/\s+/', trim($classMatch[2])) ?: [];
+                $classes = implode(' ', array_values(array_unique(array_filter(array_merge($existing, $themeClasses)))));
                 $attrs = preg_replace('/\bclass\s*=\s*[\'"].*?[\'"]/i', ' class="' . e($classes) . '"', $attrs, 1);
             } else {
-                $attrs .= ' class="table table-bordered text-center theme-price-table"';
+                $attrs .= ' class="' . implode(' ', $themeClasses) . '"';
             }
 
             return '<table' . $attrs . '>';

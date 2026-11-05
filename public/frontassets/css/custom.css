@@ -1027,6 +1027,26 @@ table.theme-price-table a.price-list-get-quote:hover {
   display: none;
 }
 
+/* Property enquiry form reCAPTCHA */
+.enquiry-recaptcha-wrap {
+  margin: 0.75rem 0 1rem;
+  overflow: hidden;
+  max-width: 100%;
+}
+.enquiry-recaptcha-wrap > div {
+  transform-origin: left top;
+}
+.enquiry-recaptcha-error {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 6px;
+}
+@media (max-width: 420px) {
+  .enquiry-recaptcha-wrap > div {
+    transform: scale(0.92);
+  }
+}
+
 @media (max-width: 767px) {
   .price-list-content table th,
   .price-list-content table td,

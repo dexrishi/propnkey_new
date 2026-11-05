@@ -291,41 +291,7 @@
             <div class="overview mt-4">
                <h3 class="property_detail-features_heading">Price List</h3>
                <div class="price-list-content">
-                  @if(!empty($property->price_list))
-                     {!! \App\Helpers\ConfigHelper::themePriceListHtml($property->price_list, $property->name) !!}
-                  @else
-                     <table class="table table-bordered text-center theme-price-table">
-                        <thead class="thead-dark">
-                           <tr>
-                              <th scope="col">Type</th>
-                              <th scope="col">Area (in SQ.FT)</th>
-                              <th scope="col">Price</th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           <tr>
-                              <td>3 BHK</td>
-                              <td>2850 sq.ft.</td>
-                              <td>₹5.3 Crore*</td>
-                           </tr>
-                           <tr>
-                              <td>3 BHK</td>
-                              <td>2952 sq.ft.</td>
-                              <td><a data-bs-target="#popup-form" data-bs-toggle="modal" href="#">Get price</a></td>
-                           </tr>
-                           <tr>
-                              <td>3 BHK</td>
-                              <td>3043 sq.ft.</td>
-                              <td><a data-bs-target="#popup-form" data-bs-toggle="modal" href="#">Get price</a></td>
-                           </tr>
-                           <tr>
-                              <td>3 BHK</td>
-                              <td>3505 sq.ft.</td>
-                              <td><a data-bs-target="#popup-form" data-bs-toggle="modal" href="#">Get price</a></td>
-                           </tr>
-                        </tbody>
-                     </table>
-                  @endif
+                  {!! \App\Helpers\ConfigHelper::propertyPriceListHtml($property) !!}
                </div>
             </div>
 

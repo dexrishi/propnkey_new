@@ -899,15 +899,7 @@
                     </div>
 
 
-                    <div class="mb-3">
-                        <label for="price_list" class="form-label">Price List</label>
-                        <textarea class="form-control @error('price_list') is-invalid @enderror" 
-                                  id="price_list" name="price_list" rows="3" 
-                                  placeholder="Detailed price list">{{ old('price_list') }}</textarea>
-                        @error('price_list')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    @include('admin.properties.partials.price-list-fields')
 
                     @include('admin.properties.partials.faq-fields')
                 </div>
@@ -1117,13 +1109,17 @@ document.addEventListener('DOMContentLoaded', function() {
         if (saveBtn) saveBtn.classList.toggle('d-none', step !== totalSteps);
 
         if (typeof window.initPropertyEditors === 'function') {
-            setTimeout(window.initPropertyEditors, 80);
+            setTimeout(function () { window.initPropertyEditors(); }, 80);
         }
         if (typeof window.initFaqEditors === 'function') {
             setTimeout(window.initFaqEditors, 100);
         }
         if (step === 2 && typeof window.toggleRentalFields === 'function') {
             window.toggleRentalFields();
+        }
+        // Step 4 Price List = Step 1 selected BHK rows
+        if (step === 4 && typeof window.ensurePriceListTable === 'function') {
+            setTimeout(function () { window.ensurePriceListTable(false); }, 220);
         }
 
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1578,26 +1574,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
+            const editorConfig = window.getAdminCkeditorConfig({
+                height: textareaId === 'price_list' ? 320 : 240,
+                min_height: textareaId === 'price_list' ? 220 : 160
+            });
+
             ClassicEditor
-                .create(textarea, window.getAdminCkeditorConfig({ height: 240, min_height: 160 }))
+                .create(textarea, editorConfig)
                 .then(function (api) {
                     if (api && api._skippedHidden) {
                         return;
                     }
                     textarea.dataset.editorReady = '1';
+                    if (textareaId === 'price_list' && typeof window.ensurePriceListTable === 'function') {
+                        window.ensurePriceListTable(false);
+                    }
                 })
                 .catch(function (error) {
                     console.error('Error initializing editor for', textareaId, ':', error);
                 });
         });
+
+        const priceListReady = document.getElementById('price_list');
+        if (priceListReady && priceListReady.dataset.editorReady === '1' && typeof window.ensurePriceListTable === 'function') {
+            window.ensurePriceListTable(false);
+        }
     };
 
     window.toggleRentalFields = toggleRentalFields;
 
     // Defer so page layout paints first
-    setTimeout(window.initPropertyEditors, 50);
+    setTimeout(function () { window.initPropertyEditors(); }, 50);
 });
 </script>
 @include('admin.properties.partials.faq-script')
+@include('admin.properties.partials.price-list-script')
 @include('admin.properties.partials.category-type-filter')
 @endpush
