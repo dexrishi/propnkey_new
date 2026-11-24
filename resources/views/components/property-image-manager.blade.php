@@ -1,5 +1,11 @@
 @php
-    $altTypeOptions = \App\Models\AltType::optionsForSelect();
+    try {
+        $altTypeOptions = \Illuminate\Support\Facades\Schema::hasTable('alt_types')
+            ? \App\Models\AltType::optionsForSelect()
+            : [];
+    } catch (\Throwable $e) {
+        $altTypeOptions = [];
+    }
 @endphp
 <div class="property-image-manager" data-property-id="{{ $property->id }}">
     <!-- Image Upload Form -->

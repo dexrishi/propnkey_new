@@ -899,7 +899,7 @@
                     </div>
 
 
-                    @include('admin.properties.partials.price-list-fields')
+                    @includeIf('admin.properties.partials.price-list-fields')
 
                     @include('admin.properties.partials.faq-fields')
                 </div>
@@ -1608,6 +1608,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @include('admin.properties.partials.faq-script')
-@include('admin.properties.partials.price-list-script')
+@includeIf('admin.properties.partials.price-list-script')
 @include('admin.properties.partials.category-type-filter')
 @endpush
